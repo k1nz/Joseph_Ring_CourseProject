@@ -30,3 +30,6 @@
 *.exe
 *.out
 *.app
+/.vs
+/Joseph_Ring_CourseProject/.vs/Joseph_Ring_CourseProject/v16
+/Joseph_Ring_CourseProject/Debug
