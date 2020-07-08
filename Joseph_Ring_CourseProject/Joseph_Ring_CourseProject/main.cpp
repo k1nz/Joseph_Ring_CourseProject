@@ -1,6 +1,6 @@
-/*                                               *
+/*                                              *
 *@file     Joseph_Ring.cpp                      *
-*@brief    基于约瑟夫环的数字游戏数据结构设计            *
+*@brief    基于约瑟夫环的数字游戏数据结构设计         *
 *@Details                                       *
 *                                               *
 *@author   qiuzirong                            *
@@ -29,8 +29,8 @@ typedef struct node
     struct node* next;
 }node, * Linklist;
 
-
-Linklist init_ring(int n)  // 创建并初始化一个带头节点的单链表  
+// 创建并初始化一个带头节点的单链表  
+Linklist init_ring(int n)  
 {
     Linklist head, p, tail; // 创建头指针head, 当前指针p，尾指针tail  
     // 由于本游戏游玩人数大于等于2人，无需考虑只有一个节点的情况  
@@ -53,10 +53,12 @@ Linklist init_ring(int n)  // 创建并初始化一个带头节点的单链表
         p->pwd = MIN + rand() % (MAX + MIN - 1);   // 随机获取密码  
         p = p->next; // 将当前指针指向下一节点  
     }
+    cout << "  初始化完成" << endl << endl;
     return head; // 返回头指针  
 }
 
-PwdType del_node(Linklist& head, Linklist& pre, Linklist& target, NameType& TempName, int count) // 删除目标节点，并返回当前节点的密码  
+// 删除目标节点，并返回当前节点的密码  
+PwdType del_node(Linklist& head, Linklist& pre, Linklist& target, NameType& TempName, int count) 
 {
     PwdType temp = target->pwd;  // 将出队的节点密码保存  
     TempName = target->name; // 将出队的节点名称保存  
@@ -72,7 +74,7 @@ PwdType del_node(Linklist& head, Linklist& pre, Linklist& target, NameType& Temp
     return temp;    // 返回出列的密码  
 }
 
-NameType Operate_Ring(Linklist head, NameType pwdArr[], PwdType n)
+NameType Operate_Ring(Linklist head, NameType NameArr[], PwdType n)
 {
     NameType last, TempName;
     PwdType initPwd = MIN + rand() % (MAX + MIN - 1); // 设置一个随机初始密码  
@@ -80,10 +82,11 @@ NameType Operate_Ring(Linklist head, NameType pwdArr[], PwdType n)
     int ele = 0, count = 0;
     pre = head;
     target = head->next;
+    cout << "初始随机密码为：" << initPwd << endl;
 
-    while (head->next)   // 当head->next不为空时反复执行  
+    while (head->next)   // 当首结点不为空时反复执行  
     {
-        int now = 1;    // 设置计数次数  
+        int now = 1;    // 设置当前计数次数  
         while (now != initPwd)    // 当计数次数不等于默认密码时反复执行  
         {
             target = target->next;   // 将目标指针指向后继  
@@ -91,13 +94,13 @@ NameType Operate_Ring(Linklist head, NameType pwdArr[], PwdType n)
             now++;  // 计数+1  
         }
         initPwd = del_node(head, pre, target, TempName, ++count);   // 删除出列节点，并返回其密码  
-        pwdArr[ele++] = TempName;   // 将出队名存入数组  
+        NameArr[ele++] = TempName;   // 将出队名存入数组  
         if (target->next == target)  //若链表中只剩下一个节点，则直接删除该节点并返回密码  
         {
             del_node(head, pre, target, last, ++count); // 删除首结点  
             head->next = NULL;   // 首结点置空  
             TempName = last;
-            pwdArr[ele] = TempName;
+            NameArr[ele] = TempName;
         }
     }
     return last;  // 返回最后胜利者名字(编号)  
@@ -142,7 +145,7 @@ void JosephRing()
     NameType player[MAXPLAYER]; // 创建一个数组存放出列的玩家  
     cout << "正在初始化中>>>";
     h = init_ring(n);
-    cout << "  初始化完成" << endl << endl;
+    
     int winner = Operate_Ring(h, player, n);
     cout << endl << "出列序列为：";
     for (int i = 0; i < n; i++)
